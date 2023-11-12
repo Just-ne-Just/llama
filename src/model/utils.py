@@ -6,7 +6,7 @@ def generate_square_mask(sz, device):
     return mask
 
 def create_mask(x, pad_idx, device):
-    if len(x.shape) == 3:
+    if len(x.shape) == 2:
         tgt_seq_len = x.shape[1]
     else:
         tgt_seq_len = x.shape[0]
