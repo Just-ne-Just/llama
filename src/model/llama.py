@@ -73,6 +73,14 @@ class LLAMA(nn.Module):
         )
         self.classification = nn.Linear(embed_dim, vocab_size)
     
+    def __str__(self):
+        """
+        Model prints with number of trainable parameters
+        """
+        model_parameters = filter(lambda p: p.requires_grad, self.parameters())
+        params = sum([torch.prod(p.size()) for p in model_parameters])
+        return super().__str__() + "\nTrainable parameters: {}".format(params)
+    
     def forward(self, input_ids: Tensor, attention_mask: Tensor, padding_mask: Tensor):
         x = self.embedding(input_ids)
         x = self.positional_encoding(x)
