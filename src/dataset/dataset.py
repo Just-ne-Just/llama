@@ -37,7 +37,7 @@ class TinyStoriesDataset(Dataset):
 
         print("Loading texts...")
         with open(data_file, encoding="utf-8") as file:
-            texts = file.readlines()
+            texts = list(map(lambda x: x.strip(), file.readlines()))
 
         self.texts = texts
         print("Texts loaded")
