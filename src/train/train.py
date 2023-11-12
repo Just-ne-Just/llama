@@ -8,7 +8,7 @@ def train_epoch(model, optimizer, dataloader, loss_fn, pad_idx):
     model.train()
     losses = 0
 
-    for tgt in tqdm(dataloader):
+    for tgt, length in tqdm(dataloader):
         tgt = tgt.to(model.device)
 
         tgt_input = tgt[:-1, :]
@@ -33,7 +33,7 @@ def evaluate(model, dataloader, loss_fn, pad_idx):
     model.eval()
     losses = 0
 
-    for tgt in tqdm(dataloader):
+    for tgt, length in tqdm(dataloader):
         src = src.to(model.device)
         tgt = tgt.to(model.device)
 

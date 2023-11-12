@@ -91,4 +91,4 @@ class TinyStoriesDataset(Dataset):
         pad = torch.full((self.max_length,), self.pad_id, dtype=torch.int64)
         pad[:length] = torch.tensor(indices)
 
-        return pad, length
+        return torch.tensor(pad), torch.tensor(length)
