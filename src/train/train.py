@@ -38,7 +38,6 @@ def evaluate(model, dataloader, loss_fn, pad_idx, device):
     losses = 0
 
     for tgt, length in tqdm(dataloader):
-        src = src.to(device)
         tgt = tgt.to(device)
 
         tgt_input = tgt[:-1, :]
