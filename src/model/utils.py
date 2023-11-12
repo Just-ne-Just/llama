@@ -6,7 +6,10 @@ def generate_square_mask(sz, device):
     return mask
 
 def create_mask(x, pad_idx, device):
-    tgt_seq_len = x.shape[0]
+    if len(x.shape) == 3:
+        tgt_seq_len = x.shape[1]
+    else:
+        tgt_seq_len = x.shape[0]
     tgt_mask = generate_square_mask(tgt_seq_len, device)
     tgt_padding_mask = (x == pad_idx).transpose(0, 1)
     return tgt_mask, tgt_padding_mask
