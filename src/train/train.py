@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from src.model.utils import create_mask
 from timeit import default_timer as timer
-from tqdm import tqdm
+from tqdm.notebook import tqdm
 
 # def train_epoch(model, optimizer, dataloader, loss_fn, pad_idx, device, evaluation_step):
 #     model.train()
