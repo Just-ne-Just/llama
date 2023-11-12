@@ -21,20 +21,30 @@ class TinyStoriesDataset(Dataset):
         """
         if not os.path.isfile(sp_model_prefix + '.model'):
             # train tokenizer if not trained yet
+            print("Starting tokenizer train...")
             SentencePieceTrainer.train(
                 input=data_file, vocab_size=vocab_size,
                 model_type=model_type, model_prefix=sp_model_prefix,
                 normalization_rule_name=normalization_rule_name,
                 pad_id=5,
             )
+            print("Finished tokenizer train")
         # load tokenizer from file
-        self.sp_model = SentencePieceProcessor(model_file=sp_model_prefix + '.model', )
 
+        print("Loading tokenizer...")
+        self.sp_model = SentencePieceProcessor(model_file=sp_model_prefix + '.model', )
+        print("Tokenizer loaded")
+
+        print("Loading texts...")
         with open(data_file) as file:
             texts = list(map(lambda x: x.strip(), file.readlines()))
 
         self.texts = texts
+        print("Texts loaded")
+
+        print("Encoding texts...")
         self.indices = self.sp_model.encode(self.texts)
+        print("Texts encoded")
 
         self.pad_id, self.unk_id, self.bos_id, self.eos_id = \
             self.sp_model.pad_id(), self.sp_model.unk_id(), \
