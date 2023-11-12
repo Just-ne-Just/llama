@@ -5,7 +5,7 @@ from sentencepiece import SentencePieceTrainer, SentencePieceProcessor
 from torch.utils.data import Dataset
 
 
-class TextDataset(Dataset):
+class TinyStoriesDataset(Dataset):
     def __init__(self, data_file: str, sp_model_prefix: str = None,
                  vocab_size: int = 30000, normalization_rule_name: str = 'nmt_nfkc_cf',
                  model_type: str = 'bpe', max_length: int = 256):
