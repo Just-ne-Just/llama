@@ -4,16 +4,16 @@ from src.model.utils import create_mask
 from timeit import default_timer as timer
 from tqdm import tqdm
 
-def train_epoch(model, optimizer, dataloader, loss_fn, pad_idx):
+def train_epoch(model, optimizer, dataloader, loss_fn, pad_idx, device):
     model.train()
     losses = 0
 
     for tgt, length in tqdm(dataloader):
-        tgt = tgt.to(model.device)
+        tgt = tgt.to(device)
 
         tgt_input = tgt[:-1, :]
 
-        tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, model.device)
+        tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, device)
 
         logits = model(tgt_input, tgt_mask, tgt_padding_mask)
 
@@ -29,17 +29,17 @@ def train_epoch(model, optimizer, dataloader, loss_fn, pad_idx):
     return losses / len(dataloader)
 
 
-def evaluate(model, dataloader, loss_fn, pad_idx):
+def evaluate(model, dataloader, loss_fn, pad_idx, device):
     model.eval()
     losses = 0
 
     for tgt, length in tqdm(dataloader):
-        src = src.to(model.device)
-        tgt = tgt.to(model.device)
+        src = src.to(device)
+        tgt = tgt.to(device)
 
         tgt_input = tgt[:-1, :]
 
-        tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, model.device)
+        tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, device)
 
         logits = model(tgt_input, tgt_mask, tgt_padding_mask)
 
@@ -50,12 +50,12 @@ def evaluate(model, dataloader, loss_fn, pad_idx):
     return losses / len(dataloader)
 
 
-def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader):
+def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device):
     loss_fn = torch.nn.CrossEntropyLoss(ignore_index=pad_idx)
 
     for epoch in range(1, n_epochs + 1):
         train_start_time = timer()
-        train_loss = train_epoch(model, optimizer, train_loader, loss_fn, pad_idx)
+        train_loss = train_epoch(model, optimizer, train_loader, loss_fn, pad_idx, device)
         train_end_time = timer()
-        val_loss = evaluate(model, val_loader, loss_fn, pad_idx)
+        val_loss = evaluate(model, val_loader, loss_fn, pad_idx, device)
         print((f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "f"Epoch time = {(train_end_time - train_start_time):.3f}s"))
