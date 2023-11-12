@@ -71,7 +71,6 @@ class LLAMA(nn.Module):
             num_layers=num_layers
         )
         self.classification = nn.Linear(embed_dim, vocab_size)
-
     
     def forward(self, input_ids: Tensor, attention_mask: Tensor, padding_mask: Tensor):
         x = self.embedding(input_ids)
