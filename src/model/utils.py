@@ -11,5 +11,5 @@ def create_mask(x, pad_idx, device):
     else:
         tgt_seq_len = x.shape[0]
     tgt_mask = generate_square_mask(tgt_seq_len, device)
-    tgt_padding_mask = (x == pad_idx).transpose(0, 1)
+    tgt_padding_mask = (x == pad_idx)
     return tgt_mask, tgt_padding_mask
