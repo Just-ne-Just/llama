@@ -40,7 +40,7 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
     for epoch in range(1, n_epochs + 1):
         losses = 0
 
-        for i, (tgt, length) in tqdm(enumerate(tqdm(train_loader_inf, desc="train", total=len_epoch))):
+        for i, (tgt, length) in enumerate(tqdm(train_loader_inf, desc="train", total=len_epoch)):
             model.train()
             tgt = tgt.to(device)
 
