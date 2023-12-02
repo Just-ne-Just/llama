@@ -91,4 +91,4 @@ class LLAMA(nn.Module):
     
     def get_next_token(self, prefix: Tensor, attention_mask: Tensor, padding_mask: Tensor):
         """ :returns: probabilities of next token """
-        return self.forward(prefix)[:, -1, :]
+        return self.forward(prefix, attention_mask, padding_mask)[:, -1, :]
