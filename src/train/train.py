@@ -71,7 +71,6 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
             optimizer.zero_grad()
 
             tgt_out = tgt[:, 1:]
-            print(logits.shape)
             loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
             loss.backward()
 
