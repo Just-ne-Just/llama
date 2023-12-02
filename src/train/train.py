@@ -39,7 +39,6 @@ def evaluate(model, dataloader, loss_fn, pad_idx, device):
 
     for tgt, length in tqdm(dataloader):
         tgt = tgt.to(device)
-        print(tgt.shape)
         tgt_input = tgt[:, :-1]
 
         tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, device)
@@ -72,6 +71,7 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
             optimizer.zero_grad()
 
             tgt_out = tgt[:, 1:]
+            print(logits.shape)
             loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
             loss.backward()
 
