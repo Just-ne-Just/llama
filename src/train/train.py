@@ -4,7 +4,7 @@ from src.model.utils import create_mask
 from timeit import default_timer as timer
 from tqdm.notebook import tqdm
 from itertools import repeat
-from src.wandb.wandb import WanDBWriter
+from src.wandb_logger.wandb import WanDBWriter
 
 
 def inf_loop(data_loader):
