@@ -126,11 +126,15 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
 
                 writer.add_scalar("train_loss", losses / a)
                 writer.add_scalar("val_loss", val_loss)
+                if scheduler is not None:
+                    writer.add_scalar("lr", scheduler.get_last_lr()[0])
                 print((f"Epoch: {epoch}, Train loss: {(losses / a):.3f}, Val loss: {val_loss:.3f}"))
                 break
 
             if (i + 1) % log_step == 0:
                 writer.set_step((epoch - 1) * len_epoch + i)
+                if scheduler is not None:
+                    writer.add_scalar("lr", scheduler.get_last_lr()[0])
                 writer.add_scalar("train_loss", losses / log_step)
                 print(f"Epoch: {epoch}, Train loss: {(losses / log_step):.3f}")
                 losses = 0
