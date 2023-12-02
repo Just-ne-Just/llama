@@ -23,10 +23,12 @@ class DecoderLayer(nn.Module):
         self.norm2 = nn.LayerNorm(embed_dim)
 
     def forward(self, x, attention_mask, padding_mask):
-        x, _ = self.attention(x, x, x, attn_mask=attention_mask, key_padding_mask=padding_mask)
-        x = self.norm1(x + self.attn_dropout(x))
-        x = self.norm2(x + self.feed_forward(x))
-        return x
+        x_ = self.norm1(x)
+        x_, _ = self.attention(x, x, x, attn_mask=attention_mask, key_padding_mask=padding_mask)
+        x_ = x + x_
+        x_ = self.norm2(x_)
+        x_ = x_ + self.feed_forward(x_)
+        return x_
 
 class Decoder(nn.Module):
     def __init__(self, decoder_layer, num_layers, *args, **kwargs) -> None:
