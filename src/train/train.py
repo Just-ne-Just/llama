@@ -56,7 +56,7 @@ def save_checkpoint(model, optimizer, epoch, scheduler=None):
         "scheduler": scheduler.state_dict() if scheduler is not None else ""
     }
 
-    filename = "checkpoint-epoch{}.pth".format(epoch)
+    filename = "checkpoint.pth"
     torch.save(state, filename)
         
 
