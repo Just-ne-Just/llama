@@ -80,7 +80,7 @@ def evaluate(model, dataloader, loss_fn, pad_idx, device):
     return losses / len(dataloader)
 
 
-def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device, dataset, scheduler=None, len_epoch=10000, log_step=500, start_step=0):
+def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device, dataset, scheduler=None, len_epoch=10000, log_step=500, start_step=10000):
     writer = WanDBWriter()
     loss_fn = torch.nn.CrossEntropyLoss(ignore_index=pad_idx)
     train_loader_inf = inf_loop(train_loader)
