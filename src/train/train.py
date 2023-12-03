@@ -69,8 +69,9 @@ def evaluate(model, dataloader, loss_fn, pad_idx, device):
         tgt_input = tgt[:, :-1]
 
         tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, device)
-
-        logits = model(tgt_input, tgt_mask, tgt_padding_mask)
+        
+        with torch.autocast(device_type=device, dtype=torch.bfloat16):
+            logits = model(tgt_input, tgt_mask, tgt_padding_mask)
 
         tgt_out = tgt[:, 1:]
         loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
@@ -95,13 +96,12 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
             tgt_input = tgt[:, :-1]
 
             tgt_mask, tgt_padding_mask = create_mask(tgt_input, pad_idx, device)
-
-            logits = model(tgt_input, tgt_mask, tgt_padding_mask)
-
             optimizer.zero_grad()
+            with torch.autocast(device_type=device, dtype=torch.bfloat16):
+                logits = model(tgt_input, tgt_mask, tgt_padding_mask)
+                tgt_out = tgt[:, 1:]
+                loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
 
-            tgt_out = tgt[:, 1:]
-            loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
             loss.backward()
 
             optimizer.step()
