@@ -80,7 +80,7 @@ def evaluate(model, dataloader, loss_fn, pad_idx, device):
     return losses / len(dataloader)
 
 
-def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device, dataset, scheduler=None, len_epoch=10000, log_step=500):
+def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device, dataset, scheduler=None, len_epoch=10000, log_step=500, start_step=0):
     writer = WanDBWriter()
     loss_fn = torch.nn.CrossEntropyLoss(ignore_index=pad_idx)
     train_loader_inf = inf_loop(train_loader)
@@ -108,7 +108,7 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
             losses += loss.item()
 
             if (i + 1) % (len_epoch + 1) == 0:
-                writer.set_step((epoch - 1) * len_epoch + i)
+                writer.set_step((epoch - 1) * len_epoch + i + start_step)
                 val_loss = evaluate(model, val_loader, loss_fn, pad_idx, device)
                 if val_loss < best_loss:
                     print("Saving checkpoint...")
@@ -132,7 +132,7 @@ def train(n_epochs, model, pad_idx, optimizer, train_loader, val_loader, device,
                 break
 
             if (i + 1) % log_step == 0:
-                writer.set_step((epoch - 1) * len_epoch + i)
+                writer.set_step((epoch - 1) * len_epoch + i + start_step)
                 if scheduler is not None:
                     writer.add_scalar("lr", scheduler.get_last_lr()[0])
                 writer.add_scalar("train_loss", losses / log_step)
